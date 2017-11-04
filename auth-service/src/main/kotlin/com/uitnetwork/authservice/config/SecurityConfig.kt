@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
+import org.springframework.web.filter.CompositeFilter
 import javax.servlet.Filter
 
 
@@ -20,13 +21,25 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
     private lateinit var facebookOAuth2Filter: Filter
 
+    @Autowired
+    private lateinit var githubOAuth2Filter: Filter
+
     override fun configure(http: HttpSecurity) {
         http.antMatcher("/**")
                 .authorizeRequests().antMatchers("/", "/login**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
-                .and().logout().logoutSuccessUrl("/").permitAll()
-                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and().addFilterBefore(facebookOAuth2Filter, BasicAuthenticationFilter::class.java)
+                .and()
+                .logout().logoutSuccessUrl("/").permitAll()
+                .and()
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
+                .addFilterBefore(createCompositeFilter(facebookOAuth2Filter, githubOAuth2Filter), BasicAuthenticationFilter::class.java)
+    }
+
+    private fun createCompositeFilter(vararg filter: Filter): CompositeFilter {
+        val compositeFilter = CompositeFilter()
+        compositeFilter.setFilters(mutableListOf(*filter))
+        return compositeFilter
     }
 
     // Make sure the OAuth2ClientContextFilter comes before the main Spring Security filter for redirect purpose
