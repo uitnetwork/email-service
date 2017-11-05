@@ -17,6 +17,9 @@ import javax.servlet.Filter
 @Configuration
 @EnableOAuth2Client
 class SecurityConfig : WebSecurityConfigurerAdapter() {
+    companion object {
+        val STATIC_RESOURCE_PATTERN = listOf("/*.js", "/*.js.map", "/*.ico")
+    }
 
     @Autowired
     private lateinit var facebookOAuth2Filter: Filter
@@ -26,7 +29,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http.antMatcher("/**")
-                .authorizeRequests().antMatchers("/", "/login**", "/webjars/**").permitAll()
+                .authorizeRequests().antMatchers("/", "/login**", *STATIC_RESOURCE_PATTERN.toTypedArray()).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout().logoutSuccessUrl("/").permitAll()
