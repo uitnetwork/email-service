@@ -1,0 +1,16 @@
+<div class="container" *ngIf="loginRequired">
+  <div>
+    With Facebook: <a href="/login/facebook">Click Here</a>
+  </div>
+  <div>
+    With Github: <a href="/login/github">Click Here</a>
+  </div>
+</div>
+
+<div class="container" *ngIf="loggedIn">
+  Logged in as: <span>{{loggedInUserInfo?.name}}</span>
+  <div>
+    <button (click)="logout()" class="btn btn-primary">Logout</button>
+  </div>
+</div>
+
