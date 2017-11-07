@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.getLoggedInUserInfo()
-      .then(loggedInUserInfo => this.setLoggedInUserInfo(this.loggedInUserInfo))
+      .then(loggedInUserInfo => this.setLoggedInUserInfo(loggedInUserInfo))
       .catch(error => this.handleErrorWhileGettingLoggedInUserInfo(error))
   }
 
