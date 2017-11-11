@@ -10,7 +10,13 @@ import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule,
+  MatButtonModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatPaginatorModule,
+  MatSortModule,
   MatTableModule
 } from '@angular/material';
 
@@ -23,7 +29,7 @@ import {
   imports: [
     BrowserModule,
     HttpModule,
-    RouterModule.forRoot(APP_ROUTES),
+    RouterModule.forRoot(APP_ROUTES, {useHash: true}),
     BrowserAnimationsModule,
     MatTableModule,
     MatButtonModule,
