@@ -47,8 +47,8 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     // Make sure the OAuth2ClientContextFilter comes before the main Spring Security filter for redirect purpose
     @Bean
-    fun oauth2ClientFilterRegistration(filter: OAuth2ClientContextFilter): FilterRegistrationBean {
-        val registration = FilterRegistrationBean()
+    fun oauth2ClientFilterRegistration(filter: OAuth2ClientContextFilter): FilterRegistrationBean<Filter> {
+        val registration = FilterRegistrationBean<Filter>()
         registration.filter = filter
         registration.order = -100
         return registration

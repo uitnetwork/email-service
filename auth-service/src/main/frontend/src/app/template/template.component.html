@@ -1,0 +1,59 @@
+<div class="template">
+  <form class="template-form">
+    <mat-form-field class="template-field">
+      <input matInput placeholder="ID" name="id">
+    </mat-form-field>
+
+    <mat-form-field class="template-field">
+      <input matInput placeholder="Name" name="name">
+    </mat-form-field>
+
+    <mat-form-field class="template-field">
+      <input matInput placeholder="Description" name="description">
+    </mat-form-field>
+
+    <mat-slide-toggle>Html template</mat-slide-toggle>
+    <br>
+    <mat-slide-toggle>Has parameters</mat-slide-toggle>
+
+    <div>
+      <mat-form-field class="param-field">
+        <input matInput placeholder="New Parameter Key" [(ngModel)]="newParamKey" name="newParamKey">
+      </mat-form-field>
+      <mat-checkbox>Required</mat-checkbox>
+      <button type="button" mat-raised-button color="primary" (click)="addNewTemplateParam()">Add</button>
+    </div>
+
+    <mat-table #templateParamTable [dataSource]="templateParamDataSource">
+      <ng-container matColumnDef="paramKey">
+        <mat-header-cell *matHeaderCellDef>Parameter Key</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.paramKey}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="required">
+        <mat-header-cell *matHeaderCellDef>Required</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="templateParamDisplayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: templateParamDisplayedColumns"></mat-row>
+    </mat-table>
+
+    <mat-form-field class="template-field">
+      <textarea matInput placeholder="Template"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary">OK</button>
+    <button mat-raised-button color="primary">Cancel</button>
+  </form>
+</div>

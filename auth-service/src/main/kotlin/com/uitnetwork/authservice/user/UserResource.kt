@@ -3,6 +3,7 @@ package com.uitnetwork.authservice.user
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import reactor.core.publisher.Mono
 import java.security.Principal
 
 @RestController
@@ -10,7 +11,7 @@ import java.security.Principal
 class UserResource {
 
     @GetMapping("/user")
-    fun user(principal: Principal): Principal {
-        return principal
+    fun user(principal: Principal): Mono<Principal> {
+        return Mono.just(principal)
     }
 }

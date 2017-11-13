@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Template } from '../models/template';
+import { TemplateComponent } from '../template/template.component';
 
 @Component({
   selector: 'app-template-management',
@@ -8,7 +9,7 @@ import { Template } from '../models/template';
   styleUrls: ['./template-management.component.scss']
 })
 export class TemplateManagementComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['checkbox', 'id', 'name', 'description', 'action'];
+  displayedColumns = ['checkbox', 'id', 'name', 'description', 'actions'];
   dataSource = new MatTableDataSource(TEST_DATA);
 
   @ViewChild(MatPaginator)
@@ -17,7 +18,7 @@ export class TemplateManagementComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort)
   sort: MatSort;
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
   }
 
 
@@ -32,6 +33,19 @@ export class TemplateManagementComponent implements OnInit, AfterViewInit {
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim().toLocaleLowerCase();
     this.dataSource.filter = filterValue;
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(TemplateComponent, {
+      width: '500px',
+      height: '500px'
+    });
+
+    dialogRef.disableClose = true;
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('After closed hehere');
+    });
   }
 }
 

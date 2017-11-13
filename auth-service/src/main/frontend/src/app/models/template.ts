@@ -1,4 +1,4 @@
 export class Template {
-  constructor(public id: String, public name: String, public description: String) {
+  constructor(public id: string, public name: string, public description: string) {
   }
 }

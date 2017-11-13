@@ -12,19 +12,24 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCheckboxModule,
+  MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatPaginatorModule,
+  MatSlideToggleModule,
   MatSortModule,
   MatTableModule
 } from '@angular/material';
+import { TemplateComponent } from './template/template.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     TemplateManagementComponent,
+    TemplateComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +43,10 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatSlideToggleModule,
+    MatDialogModule,
+    FormsModule
   ],
   providers: [
     LoginService
