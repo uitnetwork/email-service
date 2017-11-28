@@ -2,6 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Template } from '../models/template';
 import { TemplateComponent } from '../template/template.component';
+import { TemplateService } from '../service/template.service';
+import * as _ from 'lodash';
+
 
 @Component({
   selector: 'app-template-management',
@@ -10,7 +13,8 @@ import { TemplateComponent } from '../template/template.component';
 })
 export class TemplateManagementComponent implements OnInit, AfterViewInit {
   displayedColumns = ['checkbox', 'id', 'name', 'description', 'actions'];
-  dataSource = new MatTableDataSource(TEST_DATA);
+  templates: Template[] = [];
+  dataSource = new MatTableDataSource(this.templates);
 
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
@@ -18,11 +22,23 @@ export class TemplateManagementComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort)
   sort: MatSort;
 
-  constructor(public dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private templateService: TemplateService) {
   }
 
-
   ngOnInit() {
+    this.templateService.getTemplates()
+      .then(templates => this.setTemplates(templates))
+      .catch(error => console.error(error));
+  }
+
+  private setTemplates(templates: Array<Template>) {
+    this.templates = templates;
+    this.dataSource.data = this.templates;
+  }
+
+  private addTemplate(template: Template) {
+    this.templates.push(template);
+    this.dataSource.data = this.templates;
   }
 
   ngAfterViewInit(): void {
@@ -35,34 +51,29 @@ export class TemplateManagementComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
+  delete(template: Template) {
+    console.log(`Deleting ${JSON.stringify(template)}`);
+
+    this.templateService.deleteTemplate(template)
+      .then(result => {
+        _.remove(this.templates, currentTemplate => {
+          return currentTemplate.id === template.id;
+        });
+        this.setTemplates(this.templates);
+      }).catch(error => Promise.reject(error));
+  }
+
   openDialog() {
     const dialogRef = this.dialog.open(TemplateComponent, {
       width: '500px',
-      height: '500px'
+      height: '100%'
     });
 
-    dialogRef.disableClose = true;
-
     dialogRef.afterClosed().subscribe(result => {
-      console.log('After closed hehere');
+      console.log(`After closed hehere ${JSON.stringify(result)}`);
+      if (result) {
+        this.addTemplate(result);
+      }
     });
   }
 }
-
-const TEST_DATA: Template[] = [
-  {id: '1', name: 'name 1', description: 'description 1'},
-  {id: '2', name: 'name 2', description: 'description 2'},
-  {id: '3', name: 'name 3', description: 'description 3'},
-  {id: '4', name: 'name 4', description: 'description 4'},
-  {id: '5', name: 'name 5', description: 'description 5'},
-  {id: '6', name: 'name 5', description: 'description 5'},
-  {id: '7', name: 'name 5', description: 'description 5'},
-  {id: '8', name: 'name 5', description: 'description 5'},
-  {id: '9', name: 'name 5', description: 'description 5'},
-  {id: '10', name: 'name 5', description: 'description 5'},
-  {id: '11', name: 'name 5', description: 'description 5'},
-  {id: '12', name: 'name 5', description: 'description 5'},
-  {id: '13', name: 'name 5', description: 'description 5'},
-
-
-];

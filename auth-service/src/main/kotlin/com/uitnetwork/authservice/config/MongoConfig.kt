@@ -16,6 +16,6 @@ class MongoConfig : AbstractReactiveMongoConfiguration() {
     }
 
     override fun getDatabaseName(): String {
-        return "test"
+        return "authService"
     }
 }

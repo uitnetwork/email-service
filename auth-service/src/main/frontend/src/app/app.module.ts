@@ -23,6 +23,7 @@ import {
 } from '@angular/material';
 import { TemplateComponent } from './template/template.component';
 import { FormsModule } from '@angular/forms';
+import { TemplateService } from './service/template.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   providers: [
-    LoginService
+    LoginService,
+    TemplateService
   ],
   bootstrap: [AppComponent]
 })

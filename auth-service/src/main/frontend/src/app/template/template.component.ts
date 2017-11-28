@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { TemplateParam } from '../models/template-param';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/material';
+import { Template } from '../models/template';
+import { TemplateService } from '../service/template.service';
 
 @Component({
   selector: 'app-template',
@@ -10,29 +12,43 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/mate
 })
 export class TemplateComponent implements OnInit {
   templateParamDisplayedColumns = ['paramKey', 'required', 'actions'];
-  templateParamDataSource = new MatTableDataSource((TEST_TEMPLATE_PARAMS));
+  templateParams: TemplateParam[] = [];
+  templateParamDataSource = new MatTableDataSource(this.templateParams);
 
   newParamKey = '';
   newParamRequired = false;
 
-  constructor(public dialogRef: MatDialogRef<TemplateComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  template: Template;
+
+  constructor(public dialogRef: MatDialogRef<TemplateComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
+              public templateService: TemplateService) {
+    this.template = new Template(null, '', '', true, false, '', []);
   }
 
   ngOnInit() {
+    this.dialogRef.disableClose = true;
   }
 
   addNewTemplateParam() {
-    console.log('Do addNewTemplateParam');
-    console.log('abc: ' + this.newParamKey);
+    if (this.newParamKey) {
+      const newTemplateParam = new TemplateParam(this.newParamKey, this.newParamRequired);
+      this.templateParams.push(newTemplateParam);
+      this.templateParamDataSource.data = this.templateParams;
+    }
   }
 
-}
+  create() {
+    console.log(`Creating ${JSON.stringify(this.template)}`);
 
-const TEST_TEMPLATE_PARAMS: TemplateParam[] = [
-  {paramKey: 'Name', required: true},
-  {paramKey: 'Address', required: true},
-  {paramKey: 'Email', required: true},
-  {paramKey: 'Birthday', required: true},
-  {paramKey: 'Age', required: true},
-  {paramKey: 'Nothing', required: true},
-];
+    this.templateService.createTemplate(this.template)
+      .then(t => {
+        this.close(t);
+      })
+      .catch(error => console.error(error));
+  }
+
+  close(dialogResult?: any) {
+    this.dialogRef.disableClose = false;
+    this.dialogRef.close(dialogResult);
+  }
+}

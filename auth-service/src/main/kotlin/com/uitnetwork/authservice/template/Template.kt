@@ -1,5 +1,6 @@
 package com.uitnetwork.authservice.template
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -16,9 +17,12 @@ data class Template(
 
         var hasParameter: Boolean,
 
-        var templateParams: Set<TemplateParam>,
+        var templateParams: Set<TemplateParam> = emptySet(),
 
-        var template: String
+        var template: String,
+
+        @JsonIgnore
+        var userId: String = ""
 )
 
 data class TemplateParam(
