@@ -17,6 +17,7 @@ import { TemplateComponent } from './template/template.component';
 import { FormsModule } from '@angular/forms';
 import { TemplateService } from './service/template.service';
 import { NotificationService } from './service/notification.service';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,11 @@ import { NotificationService } from './service/notification.service';
     LoginComponent,
     TemplateManagementComponent,
     TemplateComponent,
+    ConfirmationDialogComponent,
+  ],
+  entryComponents: [
+    TemplateComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,

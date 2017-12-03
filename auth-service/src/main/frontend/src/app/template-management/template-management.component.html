@@ -1,6 +1,6 @@
 <div class="emailTemplateManagement">
   <div class="templateManagementButtons">
-    <button mat-icon-button color="primary" (click)="openDialog()">
+    <button mat-icon-button color="primary" (click)="createTemplate()">
       <mat-icon>add</mat-icon>
     </button>
     <button mat-icon-button color="primary">
@@ -38,13 +38,13 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary">
+        <button mat-icon-button color="primary" (click)="editTemplate(element)">
           <mat-icon>edit</mat-icon>
         </button>
         <button mat-icon-button color="primary">
           <mat-icon>content_copy</mat-icon>
         </button>
-        <button mat-icon-button color="primary" (click)="delete(element)">
+        <button mat-icon-button color="primary" (click)="confirmThenDelete(element)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-cell>

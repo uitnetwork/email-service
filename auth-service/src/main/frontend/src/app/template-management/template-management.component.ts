@@ -3,9 +3,9 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/m
 import { Template } from '../models/template';
 import { TemplateComponent } from '../template/template.component';
 import { TemplateService } from '../service/template.service';
-import * as _ from 'lodash';
 import { NotificationService } from '../service/notification.service';
-
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-template-management',
@@ -42,6 +42,15 @@ export class TemplateManagementComponent implements OnInit, AfterViewInit {
     this.dataSource.data = this.templates;
   }
 
+  private updateTemplate(template: Template) {
+    _.remove(this.templates, currentTemplate => {
+      return currentTemplate.id === template.id;
+    });
+
+    this.templates.push(template);
+    this.dataSource.data = this.templates;
+  }
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -52,30 +61,52 @@ export class TemplateManagementComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  delete(template: Template) {
+  confirmThenDelete(template: Template) {
     console.log(`Deleting ${JSON.stringify(template)}`);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
+    dialogRef.afterClosed().subscribe(isConfirmed => {
+      console.log(`Confirmed: ${isConfirmed} to delete: ${template.name}`);
+
+      if (isConfirmed === true) {
+        this.delete(template);
+      }
+    });
+  }
+
+  delete(template: Template) {
     this.templateService.deleteTemplate(template)
       .then(result => {
         _.remove(this.templates, currentTemplate => {
           return currentTemplate.id === template.id;
         });
         this.setTemplates(this.templates);
+        this.notificationService.notify(`Success: Template: ${template.name} was deleted.`);
       }).catch(error => {
       this.notificationService.notify(`Error: ${error.json().message}`);
     });
   }
 
-  openDialog() {
+  createTemplate() {
+    const dialogRef = this.dialog.open(TemplateComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Created Template: ${JSON.stringify(result)}`);
+      if (result) {
+        this.addTemplate(result);
+      }
+    });
+  }
+
+  editTemplate(template: Template) {
     const dialogRef = this.dialog.open(TemplateComponent, {
-      width: '500px',
-      height: '100%'
+      data: template
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`After closed hehere ${JSON.stringify(result)}`);
+      console.log(`Updated Template: ${JSON.stringify(result)}`);
       if (result) {
-        this.addTemplate(result);
+        this.updateTemplate(result);
       }
     });
   }

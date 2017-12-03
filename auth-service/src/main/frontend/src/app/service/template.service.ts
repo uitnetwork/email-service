@@ -30,13 +30,22 @@ export class TemplateService {
       }).catch(error => Promise.reject(error));
   }
 
+  updateTemplate(template: Template): Promise<Template> {
+    const url = `${environment.templateServiceUrl}/api/templates/${template.id}`;
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.put(url, JSON.stringify(template), {headers: headers})
+      .toPromise()
+      .then(response => {
+        return response.json() as Template;
+      }).catch(error => Promise.reject(error));
+  }
+
   deleteTemplate(template: Template): Promise<boolean> {
     const url = `${environment.templateServiceUrl}/api/templates/${template.id}`;
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.delete(url, {headers: headers})
       .toPromise()
       .then(response => {
-        console.log('response: ' + response);
         return true;
       }).catch(error => Promise.reject(error));
   }

@@ -33,6 +33,22 @@ class TemplateService {
         return templateRepository.save(template)
     }
 
+    fun updateTemplate(updatingTemplate: Template, userId: String): Mono<Template> {
+        return getTemplate(updatingTemplate.id!!)
+                .flatMap { it -> validateThenUpdate(it, updatingTemplate, userId) }
+    }
+
+    private fun validateThenUpdate(currentTemplate: Template, updatingTemplate: Template, userId: String): Mono<Template> {
+        if (currentTemplate.userId != userId) {
+            throw TemplateException("User $userId does not have permission.")
+        }
+
+        updatingTemplate.userId = userId;
+
+        logger.info { "Updating $updatingTemplate" }
+        return this.templateRepository.save(updatingTemplate)
+    }
+
     fun getTemplates(userId: String): Flux<Template> {
         return templateRepository.findByUserId(userId)
     }

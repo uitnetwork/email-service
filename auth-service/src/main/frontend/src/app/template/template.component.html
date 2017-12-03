@@ -1,4 +1,5 @@
-<div class="template">
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
   <form class="template-form">
     <mat-form-field class="template-field">
       <input matInput placeholder="Name" name="name" [(ngModel)]="template.name">
@@ -49,8 +50,10 @@
     <mat-form-field class="template-field">
       <textarea matInput placeholder="Template" [(ngModel)]="template.template" name="template"></textarea>
     </mat-form-field>
-
-    <button mat-raised-button color="primary" (click)="create()">OK</button>
-    <button mat-raised-button color="primary" (click)="close()">Cancel</button>
   </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="submit()">OK</button>
+  <button mat-raised-button color="primary" (click)="close()">Cancel</button>
 </div>

@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { TemplateParam } from '../models/template-param';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/material';
-import { Template } from '../models/template';
+import { Template, TemplateParam } from '../models/template';
 import { TemplateService } from '../service/template.service';
 import { NotificationService } from '../service/notification.service';
 
@@ -19,11 +18,23 @@ export class TemplateComponent implements OnInit {
   newParamKey = '';
   newParamRequired = false;
 
+  title = '';
+  action = '';
   template: Template;
 
   constructor(public dialogRef: MatDialogRef<TemplateComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
               public templateService: TemplateService, public notificationService: NotificationService) {
-    this.template = new Template(null, '', '', true, false, '', []);
+    if (data) {
+      this.template = data;
+      this.title = `Editing template: ${this.template.name}`;
+      this.action = 'edit';
+      this.templateParams = this.template.templateParams;
+      this.templateParamDataSource.data = this.templateParams;
+    } else {
+      this.title = 'Creating new template';
+      this.action = 'create';
+      this.template = new Template(null, '', '', true, false, '', []);
+    }
   }
 
   ngOnInit() {
@@ -38,14 +49,29 @@ export class TemplateComponent implements OnInit {
     }
   }
 
-  create() {
-    console.log(`Creating ${JSON.stringify(this.template)}`);
-
-    this.templateService.createTemplate(this.template)
-      .then(t => {
-        this.close(t);
-      })
-      .catch(error => this.notificationService.notify(`ERROR: ${error.message}`));
+  submit() {
+    switch (this.action) {
+      case 'create': {
+        this.templateService.createTemplate(this.template)
+          .then(t => {
+            this.close(t);
+          })
+          .catch(error => this.notificationService.notify(`ERROR: ${error.message}`));
+        break;
+      }
+      case 'edit': {
+        this.templateService.updateTemplate(this.template)
+          .then(t => {
+            this.close(t);
+          })
+          .catch(error => this.notificationService.notify(`ERROR: ${error.message}`));
+        break;
+      }
+      default: {
+        this.notificationService.notify(`ERROR: Unknown action`)
+        break;
+      }
+    }
   }
 
   close(dialogResult?: any) {
