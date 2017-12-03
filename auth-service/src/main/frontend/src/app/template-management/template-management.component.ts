@@ -4,6 +4,7 @@ import { Template } from '../models/template';
 import { TemplateComponent } from '../template/template.component';
 import { TemplateService } from '../service/template.service';
 import * as _ from 'lodash';
+import { NotificationService } from '../service/notification.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class TemplateManagementComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort)
   sort: MatSort;
 
-  constructor(private dialog: MatDialog, private templateService: TemplateService) {
+  constructor(private dialog: MatDialog, private templateService: TemplateService, private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -60,7 +61,9 @@ export class TemplateManagementComponent implements OnInit, AfterViewInit {
           return currentTemplate.id === template.id;
         });
         this.setTemplates(this.templates);
-      }).catch(error => Promise.reject(error));
+      }).catch(error => {
+      this.notificationService.notify(`Error: ${error.json().message}`);
+    });
   }
 
   openDialog() {

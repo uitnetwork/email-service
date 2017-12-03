@@ -37,8 +37,12 @@ class TemplateService {
         return templateRepository.findByUserId(userId)
     }
 
+    private fun getTemplate(templateId: String): Mono<Template> {
+        return templateRepository.findById(templateId).switchIfEmpty(Mono.error(TemplateNotFoundException("There is no Template with id: $templateId")))
+    }
+
     fun deleteTemplate(templateId: String, userId: String): Mono<Void> {
-        return templateRepository.findById(templateId)
+        return getTemplate(templateId)
                 .flatMap { it -> validateThenDelete(it, userId) }
     }
 

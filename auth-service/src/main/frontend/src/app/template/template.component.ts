@@ -3,6 +3,7 @@ import { TemplateParam } from '../models/template-param';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/material';
 import { Template } from '../models/template';
 import { TemplateService } from '../service/template.service';
+import { NotificationService } from '../service/notification.service';
 
 @Component({
   selector: 'app-template',
@@ -21,7 +22,7 @@ export class TemplateComponent implements OnInit {
   template: Template;
 
   constructor(public dialogRef: MatDialogRef<TemplateComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
-              public templateService: TemplateService) {
+              public templateService: TemplateService, public notificationService: NotificationService) {
     this.template = new Template(null, '', '', true, false, '', []);
   }
 
@@ -44,7 +45,7 @@ export class TemplateComponent implements OnInit {
       .then(t => {
         this.close(t);
       })
-      .catch(error => console.error(error));
+      .catch(error => this.notificationService.notify(`ERROR: ${error.message}`));
   }
 
   close(dialogResult?: any) {

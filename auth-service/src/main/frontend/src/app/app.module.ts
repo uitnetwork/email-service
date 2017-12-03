@@ -10,20 +10,13 @@ import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MatButtonModule,
-  MatCheckboxModule,
-  MatDialogModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatPaginatorModule,
-  MatSlideToggleModule,
-  MatSortModule,
-  MatTableModule
+  MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSlideToggleModule,
+  MatSnackBarModule, MatSortModule, MatTableModule
 } from '@angular/material';
 import { TemplateComponent } from './template/template.component';
 import { FormsModule } from '@angular/forms';
 import { TemplateService } from './service/template.service';
+import { NotificationService } from './service/notification.service';
 
 @NgModule({
   declarations: [
@@ -47,11 +40,13 @@ import { TemplateService } from './service/template.service';
     MatSortModule,
     MatSlideToggleModule,
     MatDialogModule,
+    MatSnackBarModule,
     FormsModule
   ],
   providers: [
     LoginService,
-    TemplateService
+    TemplateService,
+    NotificationService
   ],
   bootstrap: [AppComponent]
 })
